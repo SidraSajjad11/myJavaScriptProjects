@@ -8,7 +8,7 @@ function addTask() {
     return;
    } 
   const li = document.createElement('li');
-  li.innerHTML = `${inputBoxElement.value} - ${inputNumberElement.value}`;
+  li.innerHTML = `${inputBoxElement.value} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${inputNumberElement.value}`;
   listContainerElement.appendChild(li);
   const spanElement = document.createElement('span');
   spanElement.innerHTML = '\u00d7';
