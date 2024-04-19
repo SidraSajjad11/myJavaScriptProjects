@@ -4,19 +4,19 @@ const questions = [
     answers: [
       {
           text: 'Shark',
-          Correct: false,
+          correct: false,
       },
       {
         text: 'Blue Whale',
-        Correct: true,
+        correct: true,
       },
       {
         text: 'Elephant',
-        Correct: false,
+        correct: false,
       },
       {
         text: 'Giraffe',
-        Correct: false,
+        correct: false,
       },
     ]
   },
@@ -25,19 +25,19 @@ const questions = [
     answers: [
       {
           text: 'Asia',
-          Correct: false,
+          correct: false,
       },
       {
         text: 'Australia',
-        Correct: true,
+        correct: true,
       },
       {
         text: 'Arctic',
-        Correct: false,
+        correct: false,
       },
       {
         text: 'Africa',
-        Correct: false,
+        correct: false,
       },
     ]
   },
@@ -46,19 +46,19 @@ const questions = [
     answers: [
       {
           text: 'Kalahari',
-          Correct: false,
+          correct: false,
       },
       {
         text: 'Gobi',
-        Correct: false,
+        correct: false,
       },
       {
         text: 'Sahara',
-        Correct: false,
+        correct: false,
       },
       {
         text: 'Antarctica',
-        Correct: true,
+        correct: true,
       },
     ]
   },
@@ -67,43 +67,94 @@ const questions = [
     answers: [
       {
           text: 'Vitican City',
-          Correct: true,
+          correct: true,
       },
       {
         text: 'Bhutan',
-        Correct: true,
+        correct: false,
       },
       {
         text: 'Nepal',
-        Correct: false,
+        correct: false,
       },
       {
         text: 'Shrilinka',
-        Correct: false,
+        correct: false,
       },
     ]
   },
 ]
-const questionElement = document.querySelector('.question');
-const answerButtonElement = document.querySelector('#answer-buttons');
+const questionElement = document.querySelector('#question');
+const answerButtonElement = document.querySelector('#answer-button');
 const nextButtonElement = document.querySelector('#next-btn');
 let currentQuestionIndex = 0;
-let score =0;
+let score = 0;
 function startQuiz() {
+  console.log('Start quiz functions Called')
   currentQuestionIndex = 0;
   score = 0;
   nextButtonElement.innerHTML ='Next';
   showQuestion();
 } 
 function showQuestion() {
+  resetState();
   let currentQuestion = questions[currentQuestionIndex];
   let questionNo = currentQuestionIndex + 1;
   questionElement.innerHTML = `${questionNo}. ${currentQuestion.questions}`;
+
   currentQuestion.answers.forEach(answer => {
     const button = document.createElement('button');
     button.innerHTML = answer.text;
     button.classList.add('btn');
     answerButtonElement.appendChild(button);
+    if(answer.correct){
+      button.dataset.correct = answer.correct;
+    }
+    button.addEventListener('click', selectAnswer);
   });
 }
+function resetState() {
+  nextButtonElement.style.display = 'none';
+  while (answerButtonElement.firstChild) {
+    answerButtonElement.removeChild(answerButtonElement.firstChild);
+  }
+}
+function selectAnswer(e) {
+  const selectBtn = e.target;
+  const isCorrect = selectBtn.dataset.correct === 'true';
+  if (isCorrect) {
+    selectBtn.classList.add('correct');
+    score++;
+  } else {
+    selectBtn.classList.add('incorrect');
+  }
+  Array.from(answerButtonElement.children).forEach(button => {
+    if (button.dataset.correct === 'true') {
+      button.classList.add('correct');
+    }
+    button.disabled = true;
+  });
+  nextButtonElement.style.display = 'block';
+}
+function showScore() {
+  resetState();
+  questionElement.innerHTML = `Your Scored ${score} out of the ${questions.length}!`;
+  nextButtonElement.innerHTML = 'Play again...';
+  nextButtonElement.style.display = 'block';
+}
+function handleNextButton() {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < questions.length) {
+    showQuestion();
+  } else {
+    showScore();
+  }
+}
+nextButtonElement.addEventListener('click', () => {
+  if(currentQuestionIndex < questions.length){
+    handleNextButton();
+  } else {
+    startQuiz();
+  }
+})
 startQuiz();
